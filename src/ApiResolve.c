@@ -167,7 +167,7 @@ static uint64_t followExport(char* ptr_forward, unsigned long crypted_function_h
 
 	forward_export_hash = xor_hash(djb2((unsigned char*)forward_export));
 
-	fwd_dll_base = getDllBase(xor_hash(djb2((unsigned char*)forward_dll)));
+	fwd_dll_base = getDllBase(xor_hash(djb2(toLowerA((unsigned char*)forward_dll))));
 	if (fwd_dll_base == 0x00) {
 		fwd_dll_base = loadDll_byName(forward_dll);
 		if (fwd_dll_base == 0x00)
@@ -259,6 +259,15 @@ toLower(WCHAR* str)
 
 	}
 
+	return start;
+
+}
+static unsigned char*
+toLowerA(unsigned char* str){
+	unsigned char* start = str;
+	while (*str){
+		*str |= 0x20;
+	}
 	return start;
 
 }

